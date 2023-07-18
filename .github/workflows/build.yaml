@@ -9,14 +9,52 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        working-directory: ["typescript", "typescript-routing", "typescript-routing-js"]
     defaults:
       run:
-        working-directory: "./typescript"
+        working-directory: ./${{ matrix.working-directory }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
       - run: npm ci
       - run: npm run build --if-present
       # - run: npm test
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.working-directory }}
+          path: ./${{ matrix.working-directory }}/dist
+          if-no-files-found: error
+          retention-days: 5
+
+  git-push:
+    needs: [build]
+    permissions:
+      contents: write
+      pull-requests: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
+      - uses: actions/download-artifact@v3
+        with:
+          name: typescript
+          path: typescript/dist/
+      - uses: actions/download-artifact@v3
+        with:
+          name: typescript-routing
+          path: typescript-routing/dist/
+      - uses: actions/download-artifact@v3
+        with:
+          name: typescript-routing-js
+          path: typescript-routing-js/dist/
+      - name: typescript generate file should be same
+        run: diff -y -W 160 ./typescript-routing/dist/index.js ./typescript-routing-js/dist/index.js
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:

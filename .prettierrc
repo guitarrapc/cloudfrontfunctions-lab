@@ -1,7 +1,21 @@
 {
   "trailingComma": "es5",
-  "tabWidth": 2,
+  "tabWidth": 4,
   "semi": false,
   "singleQuote": false,
-  "printWidth": 100
+  "printWidth": 100,
+  "overrides": [
+    {
+      "files": ["*.json", "*.md", "*.yaml", "*.yml"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.prettierrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
 }
