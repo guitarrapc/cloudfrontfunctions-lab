@@ -19,10 +19,10 @@ Edit tsconfig.json and set compilerOptions `"removeComments": false` to remove a
 
 ## Goal
 
-Goal of TypeScript to Javascript is follows.
+Goal of TypeScript to JavaScript is follows.
 
 - TypeScript must build to CloudFront Functions compatible javascript.
-- Generated Javascript must remove all commnets to reduce size below quota 10KB.
+- Generated JavaScript must remove all commnets to reduce size below quota 10KB.
 
 Let's use original as follows.
 
@@ -34,12 +34,12 @@ function handler(event) {
   var uri = request.uri
 
   // Check whether the URI is missing a file name.
-  if (uri.endsWith('/')) {
-    request.uri += 'index.html'
+  if (uri.endsWith("/")) {
+    request.uri += "index.html"
   }
   // Check whether the URI is missing a file extension.
-  else if (!uri.includes('.')) {
-    request.uri += '/index.html'
+  else if (!uri.includes(".")) {
+    request.uri += "/index.html"
   }
 
   return request
@@ -56,11 +56,11 @@ function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Requ
   const uri = request.uri
 
   // Check whether the URI is missing a file name.
-  if (uri.endsWith('/')) {
-    request.uri += 'index.html'
+  if (uri.endsWith("/")) {
+    request.uri += "index.html"
     // Check whether the URI is missing a file extension.
-  } else if (!uri.includes('.')) {
-    request.uri += '/index.html'
+  } else if (!uri.includes(".")) {
+    request.uri += "/index.html"
   }
 
   return request
@@ -75,10 +75,10 @@ build typeScript by `npm run build`, and generates es5 compatible javascript.
 function handler(event) {
   var request = event.request
   var uri = request.uri
-  if (uri.endsWith('/')) {
-    request.uri += 'index.html'
-  } else if (!uri.includes('.')) {
-    request.uri += '/index.html'
+  if (uri.endsWith("/")) {
+    request.uri += "index.html"
+  } else if (!uri.includes(".")) {
+    request.uri += "/index.html"
   }
   return request
 }
