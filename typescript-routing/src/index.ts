@@ -1,6 +1,6 @@
 /**
 * tl;dr;
-* Routing CloudFront request based on IP Address
+* CloudFront request based on IP Address
 *
 *  Mock event
 // This event will rewrite request.uri to "/foo/bar_ip.png".
@@ -38,7 +38,7 @@ function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Requ
     const isAllowIP = isIpInCidr(clientIP, allow_ip_list)
     if (isAllowIP) {
       // Force replace request URL to always not maintenance json.
-      const newurl = uri.replace(targetPath, rewritePath)
+      const newurl = uri.replace(`/${targetPath}`, `/${rewritePath}`)
       request.headers["true-client-ip"] = { value: clientIP }
       request.uri = newurl
       return request

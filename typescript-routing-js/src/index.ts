@@ -38,7 +38,7 @@ function handler(event) {
     var isAllowIP = isIpInCidr(clientIP, allow_ip_list)
     if (isAllowIP) {
       // Force replace request URL to always not maintenance json.
-      var newurl = uri.replace(targetPath, rewritePath)
+      var newurl = uri.replace(`/${targetPath}`, `/${rewritePath}`)
       request.headers["true-client-ip"] = { value: clientIP }
       request.uri = newurl
       return request
