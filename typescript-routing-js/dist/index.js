@@ -8,7 +8,7 @@ function handler(event) {
         var allow_ip_list = ["1.1.1.1", "1.1.4.4", "8.8.8.8"];
         var isAllowIP = isIpInCidr(clientIP, allow_ip_list);
         if (isAllowIP) {
-            var newurl = uri.replace(targetPath, rewritePath);
+            var newurl = uri.replace("/".concat(targetPath), "/".concat(rewritePath));
             request.headers["true-client-ip"] = { value: clientIP };
             request.uri = newurl;
             return request;
