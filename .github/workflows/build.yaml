@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        working-directory: ["typescript"]
+        working-directory: ["typescript", "typescript-routing", "typescript-routing-js"]
     defaults:
       run:
         working-directory: ./${{ matrix.working-directory }}
@@ -35,6 +35,14 @@ jobs:
         with:
           name: typescript
           path: typescript/dist/
+      - uses: actions/download-artifact@v3
+        with:
+          name: typescript-routing
+          path: typescript-routing/dist/
+      - uses: actions/download-artifact@v3
+        with:
+          name: typescript-routing-js
+          path: typescript-routing-js/dist/
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
