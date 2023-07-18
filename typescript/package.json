@@ -1,0 +1,11 @@
+{
+  "name": "function-add-index",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/aws-cloudfront-function": "^1.0.2",
+    "typescript": "^5.1.6"
+  }
+}
