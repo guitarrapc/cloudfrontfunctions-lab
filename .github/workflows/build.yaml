@@ -30,6 +30,9 @@ jobs:
 
   git-push:
     needs: [build]
+    permissions:
+      contents: write
+      pull-requests: read
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
