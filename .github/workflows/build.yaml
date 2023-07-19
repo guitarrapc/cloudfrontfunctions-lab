@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        working-directory: ["typescript", "typescript-eslint", "typescript-routing"]
+        working-directory: ["typescript", "typescript-eslint", "typescript-routing", "typescript-unittest"]
     defaults:
       run:
         working-directory: ./${{ matrix.working-directory }}
