@@ -1,4 +1,4 @@
-function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Request {
+function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Request | AWSCloudFrontFunction.Response {
     const { request } = event
     const uri = request.uri
 

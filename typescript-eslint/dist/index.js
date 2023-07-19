@@ -34,14 +34,6 @@ function convertToBitString(array) {
     }
     return ret;
 }
-function convertToIpString(input) {
-    var ret = "";
-    ret = parseInt(input.slice(0, 8), 2) + ".";
-    ret += parseInt(input.slice(8, 16), 2) + ".";
-    ret += parseInt(input.slice(16, 24), 2) + ".";
-    ret += parseInt(input.slice(24, 32), 2);
-    return ret;
-}
 function getIpRange(ipAddress) {
     var ip = ipAddress.split("/");
     var group = ip[0].split(".");
