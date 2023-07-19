@@ -81,3 +81,8 @@ Snapshots:   0 total
 Time:        0.94 s
 Ran all test suites.
 ```
+
+
+# reference
+
+> [How to unit test Cloudfront functions](https://medium.com/@fabioknoedt/how-to-unit-test-cloudfront-functions-b790c4532aa0)
