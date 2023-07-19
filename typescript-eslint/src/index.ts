@@ -4,6 +4,7 @@ function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Requ
     const { request } = event
     const clientIP = event.viewer.ip
     const ips = clientIP.split(".")
+
     for (const ip of ips) {
         if (isOdd(Number(ip))) {
             request.headers[ip] = { value: "Odd" }
@@ -11,6 +12,7 @@ function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Requ
             request.headers[ip] = { value: "Even" }
         }
     }
+
     return request
 }
 

@@ -11,35 +11,38 @@ Additionally add eslint.
 
 ```sh
 cd typescript-eslint
-npm i -D eslint --prefix .                           # add eslint
-npm i -D @typescript-eslint/parser --prefix .        # add eslint for typescript
-npm i -D @typescript-eslint/eslint-plugin --prefix . # add eslint for typescript
-npx eslint -v                                        # confirm eslint installed.
-touch tsconfig.eslint.json .eslintrc.js              # initialize eslint
+npm i -D eslint --prefix .                                                     # add eslint
+npm i -D @typescript-eslint/parser @typescript-eslint/eslint-plugin --prefix . # add eslint for typescript
+npx eslint -v                                                                  # confirm eslint installed.
+npm i -D eslint-config-prettier eslint-plugin-prettier --prefix .              # add eslint prettier to disable eslint rules that conflict with prettier
+touch tsconfig.eslint.json .eslintrc.yaml                                      # initialize eslint
 ```
 
-Add eslint config `.eslintrc.js` and `tsconfig.eslint.json`.
+Add eslint config `.eslintrc.yaml` and `tsconfig.eslint.json`.
 
-- `.eslintrc.js`: Allow typescript eslint, ensure commonjs/es5, and ignore `dist/` from lint.
+- `.eslintrc.yaml`: Allow typescript eslint, ensure commonjs/es5, and ignore `dist/` from lint.
 
-```js
-module.exports = {
-  root: true,
-  parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
-  env: {
-    browser: false,
-    commonjs: true,
-    node: false,
-  },
-  parserOptions: {
-    ecmaVersion: 5,
-    sourceType: "script",
-    project: "./tsconfig.eslint.json",
-  },
-  ignorePatterns: ["dist"],
-  extends: ["plugin:@typescript-eslint/recommended-requiring-type-checking"],
-}
+> `.exlintrc.yaml` is not only option, you can use `.eslintrc.json` or `.eslintrc.js`. However `.eslintrc.yaml` is easy to write and can ignore from prettier.
+
+```yaml
+root: true
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
+env:
+  browser: false
+  commonjs: true
+  node: false
+parserOptions:
+  ecmaVersion: 5
+  sourceType: "script"
+  project: "./tsconfig.eslint.json"
+ignorePatterns:
+  - "dist"
+extends:
+  - "eslint:recommended"
+  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  - "prettier" # add prettier plugin at the end to ignore all eslint format rules
 ```
 
 - `tsconfig.eslint.json`: Allow js files, and enable `@typescript-eslint/no-unused-vars` rule.
@@ -58,7 +61,42 @@ module.exports = {
 }
 ```
 
-# Write Code
+# Enable prettier on eslint
+
+When workspace contains not only JavaScript, set prettier as default formmaer is not acceptable. Running prettier with ESLint might fit in these situation.
+
+* Remove VSCode extension `esbenp.prettier-vscode`.
+* Remove VSCode settings `"editor.defaultFormatter": "esbenp.prettier-vscode"`.
+* Install `eslint-plugin-prettier` and `prettier` npm package to configure running pretter in ESLint.
+
+```sh
+npm i -D eslint-config-prettier eslint-plugin-prettier --prefix . # add eslint prettier to disable eslint rules that conflict with prettier
+npm i -D prettier --prefix .                                      # add prettier to format code on eslint
+```
+
+`.eslintrc.yaml`: add `plugin:prettier/recommended` into extend
+
+```yaml
+root: true
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
+env:
+  browser: false
+  commonjs: true
+  node: false
+parserOptions:
+  ecmaVersion: 5
+  sourceType: "script"
+  project: "./tsconfig.eslint.json"
+ignorePatterns:
+  - "dist"
+extends:
+  - "eslint:recommended"
+  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  - "prettier"
+  - "plugin:prettier/recommended" # <-- add this!!!!
+```
 
 ## Goal
 

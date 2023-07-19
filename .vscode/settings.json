@@ -1,5 +1,4 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.workingDirectories": [{ "mode": "auto" }] // vscode to search tsconfig.eslint.json when open VSCode on repo root.
 }
