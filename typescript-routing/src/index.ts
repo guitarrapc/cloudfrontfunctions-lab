@@ -23,7 +23,7 @@ const event = {
   }
 };
 **/
-function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Request {
+function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Request | AWSCloudFrontFunction.Response {
     // Keep compute utilization under 60!
     const { request } = event
     const uri = request.uri
@@ -104,11 +104,7 @@ function getIpRange(ipAddress: string): { min: string; max: string } {
     var minIpBit = ""
     var maxIpBit = ""
 
-    if (
-        !Array.isArray(ip) ||
-        group.length !== 4 ||
-        (ip.length === 2 && String(ip[1]).match(/^([1-9]|[1-2][0-9]|3[0-2])$/) === null)
-    ) {
+    if (!Array.isArray(ip) || group.length !== 4 || (ip.length === 2 && String(ip[1]).match(/^([1-9]|[1-2][0-9]|3[0-2])$/) === null)) {
         return { min: "", max: "" } // empty
     }
 

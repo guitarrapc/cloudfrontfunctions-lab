@@ -48,9 +48,7 @@ function getIpRange(ipAddress) {
     var ipBit = "";
     var minIpBit = "";
     var maxIpBit = "";
-    if (!Array.isArray(ip) ||
-        group.length !== 4 ||
-        (ip.length === 2 && String(ip[1]).match(/^([1-9]|[1-2][0-9]|3[0-2])$/) === null)) {
+    if (!Array.isArray(ip) || group.length !== 4 || (ip.length === 2 && String(ip[1]).match(/^([1-9]|[1-2][0-9]|3[0-2])$/) === null)) {
         return { min: "", max: "" };
     }
     minIpBit = convertToBitString(group);

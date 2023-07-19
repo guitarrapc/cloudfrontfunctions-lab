@@ -1,5 +1,5 @@
 {
-  "name": "function-add-index",
+  "name": "typescript",
   "private": true,
   "scripts": {
     "build": "tsc"

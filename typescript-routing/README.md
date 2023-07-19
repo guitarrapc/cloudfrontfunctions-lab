@@ -15,4 +15,3 @@ Goal of this TypeScript to JavaScript is follows.
 
 - TypeScript must build to CloudFront Functions compatible javascript.
 - Generated JavaScript must remove all commnets to reduce size below quota 10KB.
-- TypeScript generated JavaScript is same as [typescript-routing-js](../typescript-routing-js).

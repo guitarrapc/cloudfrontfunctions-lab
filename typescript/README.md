@@ -22,7 +22,7 @@ Edit tsconfig.json and set compilerOptions `"removeComments": false` to remove a
 Goal of TypeScript to JavaScript is follows.
 
 - TypeScript must build to CloudFront Functions compatible javascript.
-- Generated JavaScript must remove all commnets to reduce size below quota 10KB.
+- Generated JavaScript must remove all commnets to reduce size below quota 10KB. (`stat -c%s "./dist/index.js"` must be less than `10240`.)
 
 Let's use original as follows.
 
