@@ -1,4 +1,4 @@
-## minimum
+## README
 
 Always redirect to https://aws.amazon.com/cloudfront/
 

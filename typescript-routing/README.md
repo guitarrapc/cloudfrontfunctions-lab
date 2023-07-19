@@ -1,4 +1,4 @@
-# TypeScript Routing
+# README
 
 Write Function as TypeScript and output as ES2015.
 This example detect ip and rewrite uri, with TypeScript type definition.

@@ -1,4 +1,4 @@
-# TypeScript
+# README
 
 Write Function as TypeScript and output as ES2015.
 
