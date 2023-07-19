@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        working-directory: ["typescript", "typescript-routing", "typescript-routing-js"]
+        working-directory: ["typescript", "typescript-eslint", "typescript-routing"]
     defaults:
       run:
         working-directory: ./${{ matrix.working-directory }}
@@ -23,6 +23,14 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       # - run: npm test
+      - name: Check dist file size is lower than 10KB
+        run: |
+          file_size=$(stat -c%s "./dist/index.js")
+          echo "${file_size}"
+          if [ $file_size -gt 10240 ]; then
+            echo "File size is too big"
+            exit 1
+          fi
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.working-directory }}
