@@ -5,5 +5,3 @@ function handler(event) {
     request.uri = newuri;
     return request;
 }
-
-handler

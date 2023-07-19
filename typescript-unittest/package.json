@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "test": "npx jest"
+    "test": "tsc; echo 'handler' >> ./dist/index.js; npx jest; tsc;"
   },
   "devDependencies": {
     "@types/aws-cloudfront-function": "^1.0.2",

@@ -7,97 +7,77 @@ This example offers unit test.
 
 > see [typescript](../typescript/README.md) for prerequisites.
 
-Additionally add eslint.
+add babel rewire and jest.
 
 ```sh
 cd typescript-unittest
 npm i -D babel-plugin-rewire babel-jest --prefix .
-touch .babelrc
+touch .babelrc.js
 ```
 
-Add eslint config `.eslintrc.yaml` and `tsconfig.eslint.json`.
+add content to `.babelrc.js`.
 
-- `.eslintrc.yaml`: Allow typescript eslint, ensure commonjs/es5, and ignore `dist/` from lint.
-
-> `.exlintrc.yaml` is not only option, you can use `.eslintrc.json` or `.eslintrc.js`. However `.eslintrc.yaml` is easy to write and can ignore from prettier.
-
-```yaml
-root: true
-parser: "@typescript-eslint/parser"
-plugins:
-  - "@typescript-eslint"
-env:
-  browser: false
-  commonjs: true
-  node: false
-parserOptions:
-  ecmaVersion: 5
-  sourceType: "script"
-  project: "./tsconfig.eslint.json"
-ignorePatterns:
-  - "dist"
-extends:
-  - "eslint:recommended"
-  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
-  - "prettier" # add prettier plugin at the end to ignore all eslint format rules
+```js
+module.exports = {
+  plugins: ['babel-plugin-rewire'],
+};
 ```
 
-- `tsconfig.eslint.json`: Allow js files, and enable `@typescript-eslint/no-unused-vars` rule.
+add `"test": "tsc; echo 'handler' >> ./dist/index.js; npx jest; tsc;"` to `package.json`. See next secrtion for detail explanation.
 
-```json
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "allowJs": true
-  },
-  "include": ["src", ".*.js", "*.js"],
-  "rules": {
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"]
-  }
-}
-```
+# UnitTest
 
-# Enable prettier on eslint
+There are 2 concerns to write unit test for CloudFront Function.
 
-When workspace contains not only JavaScript, set prettier as default formmaer is not acceptable. Running prettier with ESLint might fit in these situation.
+1. Unit Test runs to `dist/index.js`, not `src/index.ts`.
+2. Babel rewire require `handler` on last line of `dist/index.js`.
 
-* Remove VSCode extension `esbenp.prettier-vscode`.
-* Remove VSCode settings `"editor.defaultFormatter": "esbenp.prettier-vscode"`.
-* Install `eslint-plugin-prettier` and `prettier` npm package to configure running pretter in ESLint.
+Following step is how to run test, yes, it is what I put `test` for `package.json`.
 
 ```sh
-npm i -D eslint-config-prettier eslint-plugin-prettier --prefix . # add eslint prettier to disable eslint rules that conflict with prettier
-npm i -D prettier --prefix .                                      # add prettier to format code on eslint
+npm run build                     # build latest
+echo "handler` >> ./dist/index.js # add handler for test
+npx jest                          # run unit test
+npm run build                     # remove handler
 ```
 
-`.eslintrc.yaml`: add `plugin:prettier/recommended` into extend
+Prepare `dist/index.tets.js` unit test file.
 
-```yaml
-root: true
-parser: "@typescript-eslint/parser"
-plugins:
-  - "@typescript-eslint"
-env:
-  browser: false
-  commonjs: true
-  node: false
-parserOptions:
-  ecmaVersion: 5
-  sourceType: "script"
-  project: "./tsconfig.eslint.json"
-ignorePatterns:
-  - "dist"
-extends:
-  - "eslint:recommended"
-  - "plugin:@typescript-eslint/recommended-requiring-type-checking"
-  - "prettier"
-  - "plugin:prettier/recommended" # <-- add this!!!!
+```js
+const originRequest = require('./index')
+const sut = originRequest.__get__('handler');
+test('it does rewrite url case 1', async () => {
+
+    // given
+    const event = {
+        request: {
+            method: 'GET',
+            uri: '/?code=123'
+        }
+    }
+
+    // when
+    const uri = sut(event).uri
+
+    // then
+    expect(uri).toBe('/index.html?code=123');
+})
 ```
 
-## Goal
+Now you are ready to test, run `npm run test`.
 
-Goal of this TypeScript to JavaScript is follows.
+```sh
+$ npm run test --if-present
 
-- TypeScript must build to CloudFront Functions compatible javascript.
-- Generated JavaScript must remove all commnets to reduce size below quota 10KB.
+> test
+> tsc; echo 'handler' >> ./dist/index.js; npx jest
+
+ PASS  dist/index.test.js
+  ✓ it does rewrite url case 1 (2 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        0.94 s
+Ran all test suites.
+```
