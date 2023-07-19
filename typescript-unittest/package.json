@@ -1,0 +1,14 @@
+{
+  "name": "typescript",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc; echo 'handler' >> ./dist/index.js; npx jest; tsc;"
+  },
+  "devDependencies": {
+    "@types/aws-cloudfront-function": "^1.0.2",
+    "babel-jest": "^29.6.1",
+    "babel-plugin-rewire": "^1.2.0",
+    "typescript": "^5.1.6"
+  }
+}
