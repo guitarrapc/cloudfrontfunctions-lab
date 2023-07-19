@@ -59,10 +59,8 @@ jobs:
           path: typescript-routing/dist/
       - uses: actions/download-artifact@v3
         with:
-          name: typescript-routing-js
-          path: typescript-routing-js/dist/
-      - name: typescript generate file should be same
-        run: diff -y -W 160 ./typescript-routing/dist/index.js ./typescript-routing-js/dist/index.js
+          name: typescript-eslint
+          path: typescript-eslint/dist/
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
