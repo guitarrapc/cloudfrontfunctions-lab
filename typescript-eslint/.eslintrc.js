@@ -13,5 +13,5 @@ module.exports = {
         project: "./tsconfig.eslint.json",
     },
     ignorePatterns: ["dist"],
-    extends: ["plugin:@typescript-eslint/recommended-requiring-type-checking"],
+    extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended-requiring-type-checking"],
 }
