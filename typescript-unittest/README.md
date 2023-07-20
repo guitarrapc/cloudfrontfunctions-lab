@@ -41,7 +41,7 @@ npx jest                          # run unit test
 npm run build                     # remove handler
 ```
 
-Prepare `dist/index.tets.js` unit test file.
+Prepare `dist/index.test.js` unit test file.
 
 ```js
 const originRequest = require('./index')
