@@ -8,6 +8,8 @@ on:
 
 jobs:
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     timeout-minutes: 5
     strategy:
@@ -20,6 +22,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
+          persist-credentials: false
       - run: npm ci
       # require handler on last line.
       - run: npm run test --if-present
@@ -50,6 +53,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
+          persist-credentials: false
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: typescript
