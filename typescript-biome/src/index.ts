@@ -1,4 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// CloudFront Functions entry point — referenced by the runtime, not by source.
+// biome-ignore lint/correctness/noUnusedVariables: CFF invokes `handler` by name
 function handler(event: AWSCloudFrontFunction.Event): AWSCloudFrontFunction.Request | AWSCloudFrontFunction.Response {
     // Keep compute utilization under 60!
     const { request } = event

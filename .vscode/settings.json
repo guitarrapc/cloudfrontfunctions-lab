@@ -1,4 +1,13 @@
 {
   "editor.formatOnSave": true,
-  "eslint.workingDirectories": [{ "mode": "auto" }] // vscode to search tsconfig.eslint.json when open VSCode on repo root.
+  "editor.defaultFormatter": "biomejs.biome",
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }

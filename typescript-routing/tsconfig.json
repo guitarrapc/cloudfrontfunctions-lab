@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "lib": ["es2015"],
+    "types": ["aws-cloudfront-function"],
+    "rootDir": "./src",
     "outDir": "./dist",
     "removeComments": true
   },

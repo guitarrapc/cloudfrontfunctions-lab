@@ -1,9 +1,9 @@
+"use strict";
 function handler(event) {
-    var request = event.request;
-    var clientIP = event.viewer.ip;
-    var ips = clientIP.split(".");
-    for (var _i = 0, ips_1 = ips; _i < ips_1.length; _i++) {
-        var ip = ips_1[_i];
+    const { request } = event;
+    const clientIP = event.viewer.ip;
+    const ips = clientIP.split(".");
+    for (const ip of ips) {
         if (isOdd(Number(ip))) {
             request.headers[ip] = { value: "Odd" };
         }

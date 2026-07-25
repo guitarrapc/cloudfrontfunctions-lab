@@ -1,6 +1,7 @@
+"use strict";
 function handler(event) {
-    var request = event.request;
-    var uri = request.uri;
+    const { request } = event;
+    const uri = request.uri;
     if (uri.endsWith("/")) {
         request.uri += "index.html";
     }

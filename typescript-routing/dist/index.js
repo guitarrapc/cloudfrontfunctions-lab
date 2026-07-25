@@ -1,14 +1,15 @@
+"use strict";
 function handler(event) {
-    var request = event.request;
-    var uri = request.uri;
-    var targetPath = "bar.png";
-    var rewritePath = "bar-ip.png";
-    if (uri.endsWith("/".concat(targetPath))) {
-        var clientIP = event.viewer.ip;
-        var allow_ip_list = ["1.1.1.1", "1.1.4.4", "8.8.8.8"];
-        var isAllowIP = isIpInCidr(clientIP, allow_ip_list);
+    const { request } = event;
+    const uri = request.uri;
+    const targetPath = "bar.png";
+    const rewritePath = "bar-ip.png";
+    if (uri.endsWith(`/${targetPath}`)) {
+        const clientIP = event.viewer.ip;
+        const allow_ip_list = ["1.1.1.1", "1.1.4.4", "8.8.8.8"];
+        const isAllowIP = isIpInCidr(clientIP, allow_ip_list);
         if (isAllowIP) {
-            var newurl = uri.replace("/".concat(targetPath), "/".concat(rewritePath));
+            const newurl = uri.replace(`/${targetPath}`, `/${rewritePath}`);
             request.headers["true-client-ip"] = { value: clientIP };
             request.uri = newurl;
             return request;
@@ -17,9 +18,9 @@ function handler(event) {
     return request;
 }
 function isIpInCidr(ipAddress, cidrs) {
-    var ip = getIpRange(ipAddress);
+    const ip = getIpRange(ipAddress);
     for (var i = 0; i < cidrs.length; i++) {
-        var range = getIpRange(cidrs[i]);
+        const range = getIpRange(cidrs[i]);
         if (ip.min >= range.min && ip.max <= range.max) {
             return true;
         }
@@ -29,7 +30,7 @@ function isIpInCidr(ipAddress, cidrs) {
 function convertToBitString(array) {
     var ret = "";
     for (var i = 0; i < 4; i++) {
-        var bit = "00000000" + parseInt(array[i], 10).toString(2);
+        const bit = "00000000" + parseInt(array[i], 10).toString(2);
         ret += bit.slice(-8);
     }
     return ret;
@@ -43,8 +44,8 @@ function convertToIpString(input) {
     return ret;
 }
 function getIpRange(ipAddress) {
-    var ip = ipAddress.split("/");
-    var group = ip[0].split(".");
+    const ip = ipAddress.split("/");
+    const group = ip[0].split(".");
     var ipBit = "";
     var minIpBit = "";
     var maxIpBit = "";
@@ -56,12 +57,12 @@ function getIpRange(ipAddress) {
         return { min: minIpBit, max: minIpBit };
     }
     for (var i = 0; i < 4; i++) {
-        var bit = parseInt(group[i], 10).toString(2);
+        const bit = parseInt(group[i], 10).toString(2);
         if (Number(ip[1]) >= (i + 1) * 8) {
             ipBit += ("00000000" + bit).slice(-8);
         }
         else {
-            var tmpIpBit = ("00000000" + bit).slice(-8);
+            const tmpIpBit = ("00000000" + bit).slice(-8);
             ipBit += (tmpIpBit.slice(0, Number(ip[1]) - i * 8) + "11111111").slice(0, 8);
             break;
         }
