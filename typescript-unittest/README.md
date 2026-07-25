@@ -1,88 +1,54 @@
 # README
 
-Write Function as TypeScript and output as ES2015.
-This example offers unit test.
+Write Function as TypeScript and unit-test the built CloudFront Functions script with Node's built-in test runner.
 
 # Prerequisites
 
 > see [typescript](../typescript/README.md) for prerequisites.
 
-add babel rewire and jest.
+No Babel, Jest, or rewire. Tests load `dist/index.js` through `node:vm` because CloudFront Functions cannot use `export` / `module.exports`.
+
+# Unit test
+
+There is one concern when unit-testing a CloudFront Function locally:
+
+1. Tests should run against **`dist/index.js`** (the deployable artifact), not only the TypeScript source.
+
+`test/load-handler.js` evaluates that file in a VM context and returns the top-level `handler` binding.
 
 ```sh
-cd typescript-unittest
-npm i -D babel-plugin-rewire babel-jest --prefix .
-touch .babelrc.js
+npm run build   # tsc → dist/index.js
+npm test        # build, then node --test
 ```
 
-add content to `.babelrc.js`.
+`test/index.test.js`:
 
 ```js
-module.exports = {
-  plugins: ['babel-plugin-rewire'],
-};
-```
+const { describe, it } = require("node:test")
+const assert = require("node:assert/strict")
+const path = require("node:path")
+const { loadHandler } = require("./load-handler")
 
-add `"test": "tsc; echo 'handler' >> ./dist/index.js; npx jest; tsc;"` to `package.json`. See next secrtion for detail explanation.
+const sut = loadHandler(path.join(__dirname, "..", "dist", "index.js"))
 
-# UnitTest
-
-There are 2 concerns to write unit test for CloudFront Function.
-
-1. Unit Test runs to `dist/index.js`, not `src/index.ts`.
-2. Babel rewire require `handler` on last line of `dist/index.js`.
-
-Following step is how to run test, yes, it is what I put `test` for `package.json`.
-
-```sh
-npm run build                     # build latest
-echo "handler` >> ./dist/index.js # add handler for test
-npx jest                          # run unit test
-npm run build                     # remove handler
-```
-
-Prepare `dist/index.test.js` unit test file.
-
-```js
-const originRequest = require('./index')
-const sut = originRequest.__get__('handler');
-test('it does rewrite url case 1', async () => {
-
-    // given
-    const event = {
-        request: {
-            method: 'GET',
-            uri: '/?code=123'
+describe("handler", () => {
+    it("rewrites /?query to /index.html?query", () => {
+        const event = {
+            request: {
+                method: "GET",
+                uri: "/?code=123",
+            },
         }
-    }
 
-    // when
-    const uri = sut(event).uri
+        const result = sut(event)
 
-    // then
-    expect(uri).toBe('/index.html?code=123');
+        assert.equal(result.uri, "/index.html?code=123")
+    })
 })
 ```
 
-Now you are ready to test, run `npm run test`.
+# Goal
 
-```sh
-$ npm run test --if-present
-
-> test
-> tsc; echo 'handler' >> ./dist/index.js; npx jest
-
- PASS  dist/index.test.js
-  ✓ it does rewrite url case 1 (2 ms)
-
-Test Suites: 1 passed, 1 total
-Tests:       1 passed, 1 total
-Snapshots:   0 total
-Time:        0.94 s
-Ran all test suites.
-```
-
-
-# reference
-
-> [How to unit test Cloudfront functions](https://medium.com/@fabioknoedt/how-to-unit-test-cloudfront-functions-b790c4532aa0)
+- TypeScript must build to CloudFront Functions compatible JavaScript.
+- Generated JavaScript must remove all comments to stay under the 10 KB quota.
+- Unit tests must exercise the same bare `function handler` that CloudFront runs.

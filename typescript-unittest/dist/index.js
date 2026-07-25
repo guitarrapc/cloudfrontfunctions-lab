@@ -1,7 +1,8 @@
+"use strict";
 function handler(event) {
-    var request = event.request;
-    var olduri = request.uri;
-    var newuri = olduri.replace(/\/\?/, '\/index.html?');
+    const { request } = event;
+    const olduri = request.uri;
+    const newuri = olduri.replace(/\/\?/, "/index.html?");
     request.uri = newuri;
     return request;
 }
